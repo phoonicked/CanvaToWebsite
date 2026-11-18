@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "canva-to-website"
+version = "0.1.0"
+description = "Turn a Canva design into a static website you can host anywhere."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.12",
+    "imageio-ffmpeg>=0.5",
+    "Pillow>=11",
+    "requests>=2.31",
+    "selenium>=4.20",
+    # undetected-chromedriver still imports distutils, which setuptools provides on Python 3.12+
+    "setuptools>=68",
+    "tinycss2>=1.2",
+    "undetected-chromedriver>=3.5.5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+canva-to-website = "canva_to_website.cli:main"
+
+[tool.setuptools]
+packages = ["canva_to_website"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning:undetected_chromedriver"]
+markers = [
+    "browser: runs headless Chrome against a fake Canva editor page",
+    "live: converts a real Canva design (needs CANVA_COOKIES and CANVA_URL)",
+]

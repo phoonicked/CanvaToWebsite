@@ -1,0 +1,13 @@
+# Your Canva login. Never commit it.
+cookies.json
+
+# Converted sites
+output/
+
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.DS_Store

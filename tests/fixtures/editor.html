@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+  A stand-in for Canva's editor, with the parts the converter relies on:
+  - pages marked data-page-id, holding a scaled container with an aria-hidden design layer
+    and a screen-reader copy of the text next to it
+  - a page that only renders while it's on screen
+  - a blob: image and a canvas
+  - the design data in window['bootstrap'], with a linked element and a website section
+  - a media record for an animated sticker
+  If Canva changes one of these, update this file to match and the tests show what broke.
+-->
+<html lang="en-GB" class="theme light">
+<head>
+<meta charset="utf-8">
+<title>Test Design - Website</title>
+<meta property="og:title" content="Test Design">
+<style>
+  body { margin: 0; }
+  .page { width: 683px; height: 384px; margin-bottom: 1500px; overflow: hidden; }
+  .scaler { width: 1366px; height: 768px; transform: scale(0.5); transform-origin: 0 0; }
+  .layer { position: relative; width: 1366px; height: 768px; }
+  .element { position: absolute; }
+</style>
+</head>
+<body>
+<div class="page" data-page-id="PBaaaaaaaaaaaaaa">
+  <div class="scaler">
+    <div aria-hidden="true">
+      <div class="layer">
+        <div class="element" id="LBkkkkkkkkkkkkkk" style="left: 100px; top: 100px; width: 300px; height: 60px;">
+          <p style="font-family: YAFtest00000_0, _fb_, auto;">Go to contact</p>
+        </div>
+        <img class="element photo" alt="Photo" style="left: 500px; top: 100px; width: 40px; height: 40px;">
+        <canvas class="element" width="20" height="20" style="left: 600px; top: 100px;"></canvas>
+      </div>
+    </div>
+    <div class="screen-reader-copy"><p>Screen reader copy</p></div>
+  </div>
+</div>
+
+<div class="page" data-page-id="PBbbbbbbbbbbbbbb"></div>
+
+<script type="application/json">{"id":"VAsticker01","title":"Wiggle","contentType":"VECTOR_STICKER","files":[{"url":"https://video-public.canva.com/VAsticker01/v/1.json"}]}</script>
+
+<script>
+  const png = Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAEUlEQVR4nGP8z4AATEhsPBwAM9EBBzDn4UwAAAAASUVORK5CYII='), c => c.charCodeAt(0));
+  document.querySelector('img.photo').src = URL.createObjectURL(new Blob([png], {type: 'image/png'}));
+
+  const context = document.querySelector('canvas').getContext('2d');
+  context.fillStyle = 'red';
+  context.fillRect(0, 0, 20, 20);
+
+  const lazyPage = document.querySelector('[data-page-id="PBbbbbbbbbbbbbbb"]');
+  new IntersectionObserver(([entry]) => {
+    lazyPage.innerHTML = entry.isIntersecting
+      ? '<div class="scaler"><div aria-hidden="true"><div class="layer"><p>Contact page</p></div></div></div>'
+      : '';
+  }).observe(lazyPage);
+
+  window['bootstrap'] = JSON.parse('{"design":{"A":[{"a":"PBaaaaaaaaaaaaaa","E":[{"_":"LBkkkkkkkkkkkkkk","y":{"A":["Go to contact\\n"],"B":{"A":"https://canva.link/testlink"}}},{"_":"LBimage00000000x","img":"https://media-public.canva.com/abc/1/s.png"}]},{"a":"PBssssssssssssss","B":"Contact","t":[{"a":"PBbbbbbbbbbbbbbb"}]}]}}');
+</script>
+</body>
+</html>
