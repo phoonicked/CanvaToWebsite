@@ -88,12 +88,16 @@ Videos are shrunk to under 24 MB each so they'll upload to any of those services
 
 ## Contributing
 
-Install it with the test tools and run the tests:
+Use Python 3.11 or newer, in a virtual environment so the project's packages stay separate from the rest of your system. Then install it in editable mode with the test tools, and run the tests:
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pytest
 ```
+
+Editable mode (`-e`) means changes you make to the code take effect straight away, without reinstalling.
 
 The tests run against a fake Canva editor page (`tests/fixtures/editor.html`) that copies the parts of Canva the converter relies on, so they don't need a Canva account. Canva changes its editor now and then; to check the converter still works with the real thing, point the live test at one of your designs:
 
