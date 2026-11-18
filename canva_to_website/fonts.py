@@ -55,7 +55,8 @@ def save_fonts(families, font_urls, fonts_dir):
         files = font_files(family, font_urls)
         print(f"Found font {family}: {len(files)} file(s)")
         for url in files:
-            filename = f"{family}-{re.sub(r'[^\w.-]', '_', url.split('?')[0].rsplit('/', 1)[-1])}"
+            safe_name = re.sub(r'[^\w.-]', '_', url.split('?')[0].rsplit('/', 1)[-1])
+            filename = f"{family}-{safe_name}"
             extension = filename.rsplit('.', 1)[-1].lower()
             if extension in FORMATS:
                 faces.append((family, url, filename, extension))
